@@ -1,0 +1,23 @@
+SET SERVEROUTPUT ON  
+DECLARE
+    -- 테이블 타입(JAVA에서 ARRAY)을 선언    int[] arr = new int[100];
+    TYPE ENAME_TABLE_TYPE IS TABLE OF EMP.ENAME%TYPE INDEX BY BINARY_INTEGER;
+    TYPE JOB_TABLE_TYPE IS  TABLE OF EMP.JOB%TYPE INDEX BY BINARY_INTEGER;
+    ENAME_TABLE ENAME_TABLE_TYPE;
+    JOB_TABLE JOB_TABLE_TYPE;
+    I BINARY_INTEGER := 0;
+BEGIN
+    -- EMP 테이블에서 사원명과 직급을 얻어옴
+    FOR K IN (SELECT ENAME, JOB FROM EMP) LOOP
+        I := I + 1;
+        ENAME_TABLE(I) := K.ENAME;
+        JOB_TABLE(I) := K.JOB;
+    END LOOP;
+    
+    -- 테이블 변수에 저장된 값 출력
+    FOR J IN 1..I LOOP
+        DBMS_OUTPUT.PUT_LINE( RPAD(ENAME_TABLE(J), 12) || ' / ' || 
+            RPAD(JOB_TABLE(J), 9) );
+    END LOOP;
+END;
+/
